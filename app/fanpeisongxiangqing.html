@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>商店详情</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			
+			.fanhui{
+				position: absolute;
+				top: 1rem;
+				left: 1rem;
+				color: #FFFFFF;
+			}
+		
+		</style>
+	</head>
+	
+	<body style="background-color: #FFFFFF;">
+		<header >
+			<div class="dianjia">
+
+			</div>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left fanhui"></a>
+		</header>
+		
+	
+		<script src="js/mui.min.js"></script>
+		<script src="js/zepto.js"></script>
+		<script src="js/ajax.js"></script>
+		<script src="js/event.js"></script>
+		<script>
+			mui.init()
+			mui.plusReady(function(){
+				var self=plus.webview.currentWebview()
+				var shangpinId =self.shangpinId;
+//获取详情//
+				mui.ajax({
+					url:"https://elm.cangdu.org/shopping/restaurant/3961",
+					dataType:"json",
+					type:"get",
+					success:function(data){
+					alert(data.name);
+					$('.dianming').html(data.name);
+					$('.peisong').html('商家配送/分钟送达/'+data.piecewise_agent_fee.tips);
+					$('.gonggao').html('公告:'+data.promotion_info);
+					$('.huodong').html(data.activities[0].icon_name+' '+data.activities[0].description+'(app专享)'+data.activities.length+"个活动");
+					},
+					error:function(type){
+						var str = "";
+						for(var key in type){
+							str+=key+":"+type[key];
+						}
+						alert(str);
+						
+						
+					}
+				})		
+				$('.peisongxiangqing').on('tap',function(){
+//跳转配送详情
+					mui.openWindow({url:"fanpeisongxiangqing.html",id:"peisongxiangqing",extras:{
+					}})	
+				})
+			})
+			
+				
+					
+
+		</script>
+	</body>
+
+</html>
