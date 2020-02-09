@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src='../js/network.js'></script>
+<style>
+   body,html{
+        height: 100%;
+        width:100%;
+    }
+    /* 隐藏滚动条 */
+    body::-webkit-scrollbar { 
+        display:none
+
+    }
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .box{
+        width: 100%;
+        height: 80%;
+        margin-bottom: 100px;
+        text-align: center;
+        font-size: 14px;    
+        border: 1px solid #ccc;    
+    }
+    .box tr{
+        border-bottom: 1px solid  black ;
+        height: 40px;
+    }
+    .box>thead>tr{
+        background-color: #eef1f6; 
+        height: 40px;    
+        font-weight: bold;
+    }
+    .box td:nth-child(1){
+        width: 5%;      
+    }
+    .box td:nth-child(2){
+        width: 15%;      
+    }
+    .box td:nth-child(3){
+        width: 15%;      
+    }
+    .box td:nth-child(4){
+       text-align: left; 
+       padding-left: 50px;     
+    }
+    .box tbody td{
+        border-bottom:1px solid #ccc;
+        
+    }
+</style>
+
+</head>
+<link rel="stylesheet" href="fenye/pagination.css">
+<script src="fenye/underscore.js"></script>
+<script src="fenye/pagination.build.js"></script>
+<body>
+<table class="box" cellspacing='0'>
+    <thead>
+        <tr>
+        <td>姓名</td>
+        <td>注册日期</td>
+        <td>地址</td>
+        <td>权限</td>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>
+<!-- 页码 -->
+<div id="pagination" name="pagination" class="pagination"></div>
+</body>
+</html>
+
+<script>
+    //获取数据
+    $(function(){
+        function creList(page){
+            getDataFn('admin/all?offset='+((page-1)*20)+'&limit=20',{},function(data){
+                console.log(data)
+                data = data.data
+                //数据渲染到页面
+                var str = '';
+                for(var i =0;i<data.length;i++){
+                    str += `
+                        <tr>
+                            <td>${data[i].user_name}</td>
+                            <td>${data[i].create_time}</td>
+                            <td>${data[i].city}</td>
+                            <td>管理员</td>
+                        </tr>
+                    `
+                }
+                $('tbody').html(str)
+
+            })
+        }
+        creList(1)
+        getDataFn('admin/count',{},function(data){
+            var x = new pagination({
+                pagination:$('.pagination'),
+                maxPage: 7, //最大页码数,支持奇数，左右对称
+                startPage: 1,    //默认第一页
+                currentPage: 1,          //当前页码
+                totalItemCount: data.count,    //项目总数,大于0，显示页码总数
+                totalPageCount: parseInt((data.count)/20),        //总页数
+                callback:function(pageNum){
+                    console.info(pageNum);
+                    creList(pageNum)
+                    }
+            }); 
+            
+        })
+           
+        
+    })
+</script>

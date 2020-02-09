@@ -1,0 +1,349 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src='../js/network.js'></script>
+<style>
+    body,html{
+        height: 100%;
+        width:100%;
+    }
+    .jiantou{
+        cursor: pointer;
+    }
+    button{
+        font-size: 12px;
+        margin:0px 5px;
+        padding: 3px;
+        background: white;
+        outline: none;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 6px;
+        cursor: pointer;
+    }
+    .delbtn{
+        background: red;
+        border: none;
+        color: white;
+    }
+    /* 隐藏滚动条 */
+    body::-webkit-scrollbar { 
+        display:none
+
+    }
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .box{
+        width: 100%;
+        height: 80%;
+        margin-bottom: 100px;
+        text-align: left;
+        font-size: 14px;   
+        border:1px solid #ccc;     
+    }
+    .box tr{
+        border-bottom: 1px solid  black ;
+        height: 40px;
+    }
+    .box>thead>tr{
+        background-color: #eef1f6; 
+        height: 40px;    
+        font-weight: bold;
+    }
+    .box tbody td{
+        border-bottom:1px solid #ccc;        
+    }
+    .box tbody .jiantou{
+        transition: transform 0.5s ease-out;
+    }
+    .box tbody tr:hover{
+        background-color: #eef1f6;      
+    }
+    .box tbody td:nth-child(1){
+        width: 5%;
+        padding:0 2%;
+    }
+    .box tbody td:nth-child(2){
+        width: 28%;        
+    }
+    .box tbody td:nth-child(3){
+        width: 28%;        
+    }
+    .box tbody td:nth-child(4){
+        width: 28%;        
+    }
+    .box tbody td:nth-child(1) img{
+        width: 14px;
+    }
+    .ss{
+        width: 100%;
+        background: #fbfdff;
+        height: 200px;
+    }
+    .ss>ul{
+        width: 100%;
+        height: 100%;
+        list-style: none;
+    }
+    .ss>ul>li{
+        width: 49%;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        color: #99abbf;
+        position: relative;
+    }
+    .ss>ul>li>span{
+        position: absolute;
+        left: 100px;
+        color: black;
+    }
+    .bg{
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background-color: rgba(0,0,0,0.3);
+        z-index: 999;
+        top: 0;
+        left: 0;
+    }
+    .bg>.item{
+        width: 60%;
+        margin: 100px auto;
+        height: 650px;
+        background-color: white;
+        padding: 30px;
+        position: relative;
+    }
+    .last{
+        width: 90%;
+        margin: 30px auto;
+        height: 40px;
+        line-height: 40px;
+    }
+    .last>span{
+        font-size: 14px;
+    }
+    .last>input{
+        margin-left: 5%;
+        width: 80%;
+        height: 35px;
+        outline: none;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding-left: 20px;
+    }
+    .last>img{
+        margin-left:5% ;
+    }
+    .item>button{
+       position: absolute;
+       bottom: 30px;
+       right: 30px;
+       height: 40px;
+       width: 60px;
+       background-color: #20a0ff;
+       color: white;
+       cursor: pointer;
+    }
+    .item>button.no{
+        right: 120px;
+        background-color: white;
+        color: black;
+    }
+    .item img{
+        height: 250px;
+        width: 250px;
+    }
+</style>
+
+</head>
+<body>
+<link rel="stylesheet" href="fenye/pagination.css">
+<script src="fenye/underscore.js"></script>
+<script src="fenye/pagination.build.js"></script>
+<table class="box" cellspacing='0'>
+    <thead>
+        <tr>
+        <td></td>
+        <td>食品名称</td>      
+        <td>食品介绍</td>
+        <td>评分</td>
+        <td>操作</td>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>
+<!-- 页码 -->
+<div id="pagination" name="pagination" class="pagination"></div>
+</body>
+</html>
+
+<script>
+    //获取数据
+    $(function(){
+        function creList(page){
+            getDataFn('shopping/v2/foods?limit=20',{'offset':(page-1)*20},function(data){
+                console.log(data)
+                $('tbody').html('')
+                //数据渲染到页面
+                var str = '';
+                for(var i =0;i<data.length;i++){
+                    str += `
+                        <tr class='list' id='${data[i].item_id}' count='${i}'>
+                            <td><img src='../images/jiantou(1).png' class='jiantou'></td>
+                            <td>${data[i].name}</td>
+                            <td>${data[i].description}</td>
+                            <td>${data[i].rating}</td>
+                            <td>
+                                <button class='setbtn'>编辑</button>
+                                <button class='delbtn'>删除</button>
+                            </td>
+                        </tr>
+                    `
+                }
+                $('tbody').append(str)
+
+                //创建详情
+                $('.box tbody>tr .jiantou').click(function(){
+                    //判断下一个标签是否是详情页面
+                    if($(this).parents('tr').next().attr('class') == 'list'){
+                        //如果是列表 就创建
+                        var str = `
+                            <tr class='details'>
+                                <td colspan="5">
+                                    <div class="ss">
+                                        <ul>
+                                            <li>食品名称<span>${data[$(this).parents('tr').attr('count')].name}</span></li>
+                                            <li>餐馆名称<span>效果演示</span></li>
+                                            <li>食品ID<span>${data[$(this).parents('tr').attr('count')].item_id}</span></li>
+                                            <li>餐馆ID<span>${data[$(this).parents('tr').attr('count')].restaurant_id}</span></li>
+                                            <li>食品介绍<span>${data[$(this).parents('tr').attr('count')].description}</span></li>
+                                            <li>餐馆地址<span></span></li>
+                                            <li>食品评分<span>${data[$(this).parents('tr').attr('count')].rating}</span></li>
+                                            <li>食品分类<span></span></li>
+                                            <li>月销量<span>${data[$(this).parents('tr').attr('count')].month_sales}</span></li>
+                                        </ul>    
+                                    </div>
+                                </td>
+                            </tr>
+                        `
+                        $(this).parents('tr').after(str)
+                        $(this).css({'transform':'rotate(90deg)'})
+                    }else{                     
+                        //删除
+                        $(this).parents('tr').next().remove()
+                        $(this).css({'transform':'rotate(0deg)'})
+                    }
+                })
+
+
+
+                // 删除按钮
+                $('.box tbody>tr .delbtn').click(function(){
+                    var id = $(this).parents('tr')[0].id;
+
+                   
+                    $.ajax({
+                        type:'DELETE',
+                        // dataType:'jsonp',
+                        url:'https://elm.cangdu.org/shopping/restaurant?'+id,
+                        contentType:"application/json",
+                        success:function(){
+                            console.log(data)
+                        }
+                    })
+                })
+
+
+                $('.setbtn').click(function(){
+                    
+                    var id = $(this).parents('tr')[0].id;
+                   var num = $(this).parents('tr').attr('count');
+                        console.log(data)
+                        var str = `
+                            <div class='bg remove'>
+                                <div class='item'>
+                                    <h3>修改店铺信息</h3>
+                                    <div class='last'>
+                                        <span>食品名称</span>
+                                        <input type='text' value='${data[$(this).parents('tr').attr('count')].name}' id='sname'>
+                                    </div>
+                                    <div class='last'>
+                                        <span>食品介绍</span>
+                                        <input type='text'  value='${data[$(this).parents('tr').attr('count')].description}' id='sdescription'>
+                                    </div>
+                                    <div class='last'>
+                                        <span>食品分类</span>
+                                        <input type='text' style='width:40%' value='asd' id='scategory'>
+                                    </div>
+                                    <div class='last'>
+                                        <span>食品图片</span>
+                                        <img src ='https://elm.cangdu.org/img/${data[$(this).parents('tr').attr('count')].image_path}' id='simage_path'>
+                                    </div>
+                                    <button class='yes'>确定</button>
+                                    <button class='no remove'>取消</button>
+                                </div> 
+                            </div>
+                        `;
+                        $('body').append(str)
+
+                        //取消按钮
+                        $('.remove').click(function(e){
+                            var classname = $(e.target).attr('class');
+                            console.log(classname)
+                           if(classname == 'bg remove' || classname == 'no remove' || classname == 'close remove'){
+                                $('.bg').remove()
+                           }
+                        })
+                        
+                        //确定按钮
+                        $('.yes').click(function(){
+                        
+                            $.post('https://elm.cangdu.org/shopping/v2/updatefood',{
+                                item_id :data[num].item_id,
+                                name:$('#sname').val() ,
+                                description:$('#sdescription').val(),    
+                                image_path :'11111',
+                                restaurant_id  :data[num].restaurant_id,    
+                                category_id  :data[num].category_id,    
+                                specfoods  :[{specs: '默认',packing_fee: 0,price: 20,}]    
+                            },function(data){
+                                alert(data.message)
+                                $('.bg').remove()
+                            })
+                        })
+
+
+
+                   
+                })
+
+            })
+
+
+        }
+        creList(1)
+        getDataFn('shopping/v2/foods/count',{},function(data){
+            var x = new pagination({
+                pagination:$('.pagination'),
+                maxPage: 7, //最大页码数,支持奇数，左右对称
+                startPage: 1,    //默认第一页
+                currentPage: 1,          //当前页码
+                totalItemCount: data.count,    //项目总数,大于0，显示页码总数
+                totalPageCount: Math.ceil((data.count)/20),        //总页数
+                callback:function(pageNum){
+                    console.info(pageNum);
+                    creList(pageNum)
+                    }
+            });    
+            console.log(data)
+        })
+    })
+</script>

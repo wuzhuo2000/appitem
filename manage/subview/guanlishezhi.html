@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        h1{
+           text-align: center;
+        }
+        div{
+            background-color: #f5f5f5;;
+            width: 70%;
+            height: 450px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+    <script src="../js/network.js"></script>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <h1>管理员信息</h1>
+    <div>
+        
+    </div>
+    <script>
+        getDataFn('admin/info',{},function(data){
+            console.log(data)
+        })
+    </script>
+</body>
+</html>

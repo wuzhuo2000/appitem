@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style> 
+        *{
+            margin:0 ;
+            padding: 0;
+        }
+        .title{
+            text-align: center;
+            font-size: 30px;
+        }
+        .topul{
+            list-style:none;
+            width: 100%;
+            height: 40px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        .topul>li{
+            float: left;
+            width: 230px; 
+            height: 40px;
+            border-radius: 10px;
+            background: #e5e9f2;
+            margin-right: 25px;
+            text-align: center;
+            line-height: 40px;
+            color:#666666;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        .topul>li:nth-child(1){
+            font-size: 22px;
+            color: white;
+            background-color: #ff9800;
+        } 
+        .topul2>li:nth-child(1){
+            background-color: #20a0ff;
+        }
+        .topul .count{
+            font-size: 26px;
+            color: #333333;
+            line-height: 40px;
+            padding-right: 5px;
+        }  
+        .box{
+            height: 500px;
+            width: 90%;
+            margin: 70px auto;
+        }
+    </style>
+</head>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src='../js/network.js'></script>
+<script src='../js/echarts.min.js'></script>
+<body>
+    <p class="title">数据统计</p>
+    <ul class="topul">
+        <li>当日数据:</li>
+        <li><span class='count'></span>新增用户</li>
+        <li><span class='count'></span>新增订单</li>
+        <li><span class='count'></span>新增管理员</li>
+    </ul >
+    <ul class="topul topul2">
+        <li>总数据:</li>
+        <li><span class='count'></span>注册用户</li>
+        <li><span class='count'></span>订单</li>
+        <li><span class='count'></span>管理员</li>
+    </ul>
+    <div class="box" id="box"></div>
+    <script>     
+        //新增用户   
+        getDataFn('statis/user/'+format(new Date(),'yyyy-MM-dd')+'/count',{},function(data){           
+            $('.count').eq(0).html(data.count)
+        })
+        //总用户
+        getDataFn('v1/users/count',{},function(data){         
+            $('.count').eq(3).html(data.count)
+        })
+        //新增订单
+        getDataFn('statis/order/'+format(new Date(),'yyyy-MM-dd')+'/count',{},function(data){
+            $('.count').eq(1).html(data.count)
+        })
+        //总订单
+        getDataFn('bos/orders/count',{},function(data){
+            $('.count').eq(4).html(data.count)
+        })
+        //新增管理员
+        getDataFn('admin/all?offset=0&limit=20',{},function(data){
+            
+           
+            //获取当前的时间 判断是否是今天创建的
+          
+            var n = 0;
+            for(var i =0;i<data.data.length;i++){                    
+                if( (data.data[i].create_time).substr(0,10) == format(new Date(),'yyyy-MM-dd') ){
+                    n++;
+                }
+            }
+         
+            $('.count').eq(2).html(n)
+        })
+        //总管理员
+        getDataFn('admin/count',{},function(data){
+            $('.count').eq(5).html(data.count)
+            
+        })
+
+        //图表
+        // 1.获取数据
+        // 七天内的数据
+        var newUsers = [];
+        var newDingdan = [];
+        var newGuanli = [];
+        var newDate = [];
+        var day = 0;
+        function fun(){
+            for(var i =0;i<7;i++){
+                getNew(day)
+                day += 86400000;
+            }
+            setTimeout(function(){
+                creBox()
+            },1500)
+        }
+        fun()
+        
+       function getNew(day){
+            //用户
+            getDataFn('statis/user/'+format(new Date(new Date().getTime()- day),'yyyy-MM-dd')+'/count',{},function(data){           
+                newUsers.push(data.count)                
+            })
+            //订单
+            getDataFn('statis/order/'+format(new Date(new Date().getTime()- day),'yyyy-MM-dd')+'/count',{},function(data){
+                newDingdan.push(data.count) 
+               
+            })
+            //管理
+            getDataFn('admin/all?offset=0&limit=200',{},function(data){         
+                var n = 0;
+                for(var i =0;i<data.data.length;i++){                    
+                    if( (data.data[i].create_time).substr(0,10) == format(new Date(new Date().getTime()- day),'yyyy-MM-dd') ){
+                        n++;
+                    }
+                }            
+                newGuanli.push(n)             
+            })
+           newDate.push(format(new Date(new Date().getTime()- day),'yyyy-MM-dd'))
+            
+       }
+    function creBox(){
+       //创建数据图
+       var myChart = echarts.init(document.getElementById('box'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '走势图'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['新注册用户', '新增订单', '新增管理员']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                // feature: {
+                //     saveAsImage: {}
+                // },
+                show:true,
+                showTitle:true,
+                feature: {
+    magicType: {
+        type: ['line', 'bar', 'stack', 'tiled']
+    }
+}
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: newDate.reverse()
+            },
+            yAxis: {
+                // type: 'value'
+                max:200,
+                min:0
+            },
+            series: [
+                {
+                    name: '新注册用户',
+                    type: 'line',
+                   
+                    data: newUsers.reverse()
+                },
+                {
+                    name: '新增订单',
+                    type: 'line',
+                   
+                    data: newDingdan.reverse()
+                },
+                {
+                    name: '新增管理员',
+                    type: 'line',
+                   
+                    data: newGuanli.reverse()
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+    }
+
+
+
+    // function timeout(ms) {
+    //         return new Promise((resolve, reject) => {
+    //             setTimeout(resolve, 1000);
+    //     })
+    // }
+
+    //     async function asyncPrint(value, ms) {
+    //         await timeout(ms).then(() => {
+    //             console.log('我是异步处理');
+    //         });
+    //         console.log(value);
+    //     }
+
+    //     asyncPrint('hello world', 1000);
+
+
+        
+    </script>
+</body>
+</html>

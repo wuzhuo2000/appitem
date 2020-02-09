@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>后台管理系统</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            height: 100%;
+            width: 100%;
+        }
+        .left-fixed{
+            position:fixed;
+            left: 0;
+            top: 0;
+            z-index: 99;
+            height: 100%;
+            width: 16.5%;
+            background-color:#324057;
+            overflow: hidden;
+        }
+        .left-fixed .left-ico{
+           height: 14px;
+            margin-left: 20px;
+        }
+        .left-fixed .xuanxiang{
+           height: 20px;
+           float: right;
+           margin-right: 30px;
+           transition: transform ease 0.5s;
+            
+        }
+        .left-fixed .submenu{           
+            width: 100%;           
+        }
+        .left-fixed .submenu>li{
+           transition: all ease 1s;
+           font-size: 14px;
+           padding: 15px 30px;
+           width: 100%;   
+           color: #bfcdb9;   
+           background-color: #1f2d3d;   
+           display: none; 
+        }
+        .left-fixed .submenu>li:hover{
+            background-color:rgba(255,255,255, 0.3) ;
+            cursor: pointer;
+        }
+        .left-fixed .submenu>p{
+            height: 100%;
+            width: 100%;
+            padding: 15px 0;
+            transition: all ease-out 0.5s;
+        }
+        .left-fixed .submenu>p:hover{
+            background-color:rgba(255,255,255, 0.3) ;
+            cursor: pointer;
+        }
+        .left-fixed .submenu .text{
+            font-size: 14px;
+            color: #bfcdb9;
+            margin-left: 10px;
+        }
+        iframe{
+            width:81.5% ;
+            height: 88%;     
+            position: fixed;
+            right: 1%;
+            top: 10%;          
+        }
+        .topmenu{
+            height:8%;
+            width: 83.5%;
+            background: #eff2f7;
+            position:fixed;
+            top: 0;
+            right: 0;
+            font-size: 13px;
+            line-height: 75px;
+        }
+        .topmenu>p{
+            margin-left: 20px;
+        }
+        .topmenu>p>span{
+            margin: 0px 5px;
+        }
+        .login{
+            height: 100%;
+            width: 100%;
+            background:#324057;
+            z-index: 999;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .login>h1{
+            text-align: center;
+            margin-top: 250px;
+            color: white;
+        }
+        .login>.loginbox{
+            height: 250px;
+            width: 400px;
+            margin: 50px auto;
+            background:white;
+            border-radius: 10px;
+        }
+        .login>.loginbox>input{
+            width: 80%;
+            display: block;
+            margin: 20px auto;
+            height: 40px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            padding: 0px 5%;
+            outline: none;
+            position: relative;
+            top: 20px;
+        }
+        .login>.loginbox>button{
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+            height: 40px;
+            border:1px solid #ccc;
+            border-radius:5px;           
+            outline: none;
+            margin-top:40px;
+            background:#20a0ff;
+        }
+        .login>.loginbox>p{
+            font-size: 10px;
+            text-align: center;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+        <h1>elm后台管理系统</h1>
+        <div class="loginbox">
+            <input type="text" placeholder="用户名" id="id">
+            <input type="text" placeholder="密码" id='pwd'>
+            <button>登录</button>
+            <p>
+                温馨提示: <br>
+                未登录过的新用户，自动注册 <br>
+                注册过的用户可凭账号密码登录 <br>
+            </p>
+        </div>
+    </div> 
+    <!-- 左边固定菜单 -->
+    <div class="left-fixed">
+        <ul class="submenu shouye">
+            <p id='index'  class='click'><img src="images/shu.png" alt="" class="left-ico"><span  class="text shouye" >首页</span></p>            
+        </ul>
+        <ul class="submenu">
+            <p><img src="images/wenjian.png" alt="" class="left-ico"><span class="text">数据管理</span>
+                <img src="images/jiantou.png" alt="" class="xuanxiang">
+            </p>
+            <li id="userlist" class='click'>用户列表</li>
+            <li id='shangjia' class='click'>商家列表</li>
+            <li id='foodlist' class='click'>食品列表</li>
+            <li id='dingdan' class='click'>订单列表</li>
+            <li id='admin' class='click'>管理员列表</li>
+        </ul>
+        <ul class="submenu">
+            <p><img src="images/tianjia.png" alt="" class="left-ico"><span class="text">添加数据</span>
+                <img src="images/jiantou.png" alt="" class="xuanxiang">
+            </p>
+            <li id='addshangjia' class='click'>添加商铺</li>
+            <li id="addfood" class="click">添加商品</li>
+        </ul>
+        <ul class="submenu">
+            <p><img src="images/xing.png" alt="" class="left-ico"><span class="text">图表</span>
+                <img src="images/jiantou.png" alt="" class="xuanxiang">
+            </p>
+            <li id="yonghufenbu" class="click">用户分布</li>
+        </ul>
+        <ul class="submenu">
+            <p><img src="images/bi.png" alt="" class="left-ico"><span class="text">编辑</span>
+                <img src="images/jiantou.png" alt="" class="xuanxiang">
+            </p>
+            <li id="wenbenbianji" class="click">文本编辑</li>
+        </ul>
+        <ul class="submenu">
+            <p><img src="images/shezhi.png" alt="" class="left-ico"><span class="text">设置</span>
+                <img src="images/jiantou.png" alt="" class="xuanxiang">
+            </p>
+            <li id="guanlishezhi" class="click">管理员设置</li>
+        </ul>
+        <ul class="submenu">
+            <p><img src="images/shuoming.png" alt="" class="left-ico"><span class="text">说明</span>
+                <img src="images/jiantou.png" alt="" class="xuanxiang">
+            </p>
+            <li id="shuoming" class="click">说明</li>
+        </ul>
+    </div>
+    <div class="topmenu">
+        <p><span>首页</span></p>
+    </div>
+    <iframe src="subview/index.html" frameborder="0" id="iframe"></iframe>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/network.js"></script>
+    <script>
+        $(function(){
+            // $.ajax({
+            //     type:'GET',
+            //     url:'https://elm.cangdu.org/admin/info',
+            //     dataType:'jsonp',
+            //     success:function(data){
+            //         console.log(data)
+            //     }
+            // })
+            
+            //判断是否登录
+            document.cookie = 'age = 18;max-age ='+60*60*24;
+            getDataFn('admin/info',{},function(data){
+                console.log(data)
+                if(data.status == 0){
+
+                    //设置cookie
+                    console.log(document.cookie)
+                    $('.login>.loginbox>button').click(function(){
+                        var id= $('#id').val()
+                        var pwd =$('#pwd').val()
+                        if(id=='' || pwd ==""){
+                            alert('信息不全请输入')
+                        }else{
+                            $.post('https://elm.cangdu.org/admin/login',{user_name:id,password:pwd},function(data){
+                                console.log(data)
+                                if(data.status==0){
+                                    alert(data.message)
+                                    
+                                }else if(data.status==1){
+                                    alert(data.success)
+                                    $(".login").remove()
+                                        $.ajax({
+                                            url:'https://elm.cangdu.org/admin/info',
+                                            type:'get',
+                                            dataType:'json',
+                                            success:function(data){
+                                                console.log(data)
+                                            },error:function(error){
+                                                console.log(error)
+                                            }
+                                        })
+                                }
+                            })
+                        }
+                        
+                    })
+                }else{
+                    $('.login').remove()
+                }
+            })
+
+
+
+
+
+
+        //左边菜单下拉效果
+            $('.left-fixed .submenu>p').click(function(){                
+                if($(this).parent().attr('isShow') == 'is'){
+                    $(this).parent().attr('isShow','no').find('li').css({'display':'none'})
+                    $(this).parent().find('.xuanxiang').css('transform','rotate(0deg)')
+                }else{
+                    $(this).parent().attr('isShow','is').find('li').css({'display':'block'});
+                    $(this).parent().find('.xuanxiang').css('transform','rotate(180deg)')
+                }
+            })
+
+
+            $('.click').click(function(){
+                $('#iframe').attr('src','subview/'+this.id+'.html');
+            })
+
+            $('.submenu>li').click(function(){
+                $('.submenu>li').css('color','#bfcdb9')
+                $(this).css('color','#20a0ff')
+
+                $('.topmenu').html('<p><span>首页</span><span>/</span><span>'+$(this).parent().find('.text').html()+'</span><span>/</span><span>'+$(this).html()+'</span><p>')
+            })
+
+            $('.shouye').click(function(){
+                $('.topmenu').html('<p>首页<p>')
+            })
+        })
+
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,body{
+            height: 100%;
+            width: 100%;
+        }
+        .box{
+            list-style: none;
+            width: 70%;
+            margin: 0 auto;  
+            /* border: 1px solid red;         */
+        }
+        .box>li{
+            position: relative;
+            color: #48576a;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+        .must{
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            color: red;
+        }
+        .shuru{
+            width: 70%;
+            height: 30px;
+            border-radius: 5px;
+            outline: 0px solid red;
+            border: 1px solid #ccc;
+            margin-left: 10px;
+        }
+        .xiala{
+            width: 30%;
+            height: 30px;
+            border-radius: 5px;
+            outline: 0px solid red;
+            border: 1px solid #ccc;
+            margin-left: 10px;
+            position: absolute;
+            left: 60px;
+            top: 5px;
+            cursor: pointer;
+        }
+        .xialabox{
+            position: absolute;
+            left: 70px;
+            top: 40px;
+            height: 210px;
+            width: 320px;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 2px #ccc;
+            border-radius: 5px;
+            display:none;
+            background-color: white;
+            z-index: 999;
+        }
+        .xiala>.jiantou{
+            width: 30px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: all 0.5s ease-out;;
+        }
+         /* 隐藏滚动条 */
+    body::-webkit-scrollbar { 
+        display:none
+
+    }
+    ul::-webkit-scrollbar{
+        display:none;
+    }
+    .xialabox>ul{
+        list-style:none;
+        width: 49.5%;
+        float: left;
+        height: 100%;
+        padding:0;
+        overflow: scroll;
+    }
+    .xialabox>ul:nth-child(1){
+        border-right: 1px solid #ccc;
+
+    }
+    .xialabox>.title li{
+        height: 20px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .xialabox>.title li:hover{
+        background-color: #ccc;
+    }
+    .xialabox>.result li{
+        height: 20px;
+        padding: 10px;
+        cursor: pointer;
+       
+    }
+    .xialabox>.result li:hover{
+        background-color: #ccc;
+    }
+    .xialabox>.title li>img{
+        float: right;
+        width: 18px;
+        transform: rotate(-90deg);
+    }
+    .xiala>span{
+        font-size: 14px;
+        line-height: 30px;
+        margin:0px 5px;
+    }
+    .kaiguan{
+        list-style:none;
+    }
+    input[type=number]{
+        width:30%;
+        height: 30px;
+        border-radius: 5px;
+        outline: 0px solid red;
+        border: 1px solid #ccc;
+        margin-left: 23px;
+    }
+    .uppic{
+        width: 120px;
+        height: 120px;
+        border:1px dashed  #ccc;
+        border-radius: 10px;
+        margin-left: 70px;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .uppic:hover{
+        border-color: blue;
+    }
+    .uppic>.add{
+        width: 20%;      
+        position: absolute;
+        top: 40%;
+        left: 40%;         
+    }
+    .uppic>.ready{
+        width: 100%;
+        height: 100%;
+    }
+    input[type=file]{
+        display: none;
+    }
+    .btn{
+        color: #fff;
+        background-color: #20a0ff;
+        display: block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;        
+        border: 1px solid #c4c4c4;
+        
+        margin: 0;
+        padding: 10px 15px;
+        border-radius: 4px;
+        width: 90px;
+        margin: 100px auto;
+    }
+    </style>
+</head>
+<body>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <ul class="box">
+        <li>
+            <span class="must">*</span>店铺名称 <input type="text" class='shuru name' >
+        </li>
+        <li>
+            <span class="must">*</span>详细地址 <input type="text" class='shuru address'  placeholder="请输入地址">
+            <p>当前城市:临汾</p>
+        </li>
+        <li>
+            <span class="must">*</span>联系电话 <input type="text" class='shuru phone' >
+        </li>
+        <li>
+           店铺简介 <input type="text" class='shuru jieshao'>
+        </li>
+        <li>
+            店铺标语 <input type="text" class='shuru biaoyu' >
+         </li>
+         <li>
+             店铺分类 <div class="xiala"><span></span><span></span><img src="../images/jiantou.png"  class="jiantou"></div>
+             <div class="xialabox">
+                 <ul class="title"></ul>
+                 <ul class="result"></ul>
+             </div>
+         </li>
+         <li>配送费
+             <input type="number" min="0" max="10" class="peisong">
+         </li>
+         <li>
+             起送价
+             <input type="number" min="0" max="" class="qisong">
+         </li>
+         <li>店铺头像
+            <label><div class="uppic"><img src="../images/add.png" alt="" class="add" id="touxiang"></div>
+                <input type="file" class="upimg"></label>
+             
+         </li>
+         <li>
+             营业执照
+             <label><div class="uppic"><img src="../images/add.png" alt="" class="add" id="zhizhao"></div>
+             <input type="file" class="upimg"></label>
+         </li>
+         <li>
+             餐饮许可
+             <label><div class="uppic"><img src="../images/add.png" alt="" class="add" id="xuke"></div>
+                <input type="file" class="upimg"></label>
+        <button class="btn">立即创建</button>
+         
+    </ul>
+    <script>
+
+        $(function(){
+            var fenleiArry = [
+                {
+                    title:'异国料理',
+                    result:[
+                        '日韩料理',
+                        '西餐',
+                        '披萨意面',
+                        '东南亚菜'
+                    ]
+                },
+                {
+                    title:'快餐便当',
+                    result:[
+                        '简餐',
+                        '盖浇饭',
+                        '米粉面馆',
+                        '包子粥店',
+                        '香锅砂锅',
+                        '麻辣烫'
+                    ]
+                }           
+            ]
+                
+            var fenleistr = '';
+            for(var i =0;i<fenleiArry.length;i++){
+                fenleistr += `<li>${fenleiArry[i].title}<img src='../images/jiantou.png'></li>`
+            }
+            $('.xialabox .title').html(fenleistr)
+
+            $('.xialabox .title>li').click(function(){
+                $(this).css('background','#20a0ff').siblings().css('background','none')
+                $('.xiala>span').eq(0).html($(this)[0].innerText)
+                var index = $(this).index();
+                var str = '';
+                for(var i =0;i<fenleiArry[index].result.length;i++){
+                    str += `<li>${fenleiArry[index].result[i]}</li>`
+                }
+                $('.xialabox .result').html(str)
+                $('.xialabox .result>li').click(function(){
+                    $(this).css('background','#20a0ff').siblings().css('background','none')
+                    $('.xiala>span').eq(1).html($(this)[0].innerText)
+                })
+            })
+            var xiala = 0;
+            $('.xiala').click(function(){
+                if(xiala == 0){
+                    $(this).find('img').css('transform','rotate(180deg)');
+                    $('.xialabox').slideDown()
+                    xiala =1;
+                }else{
+                    xiala = 0;
+                    $(this).find('img').css('transform','rotate(0deg)');
+                    $('.xialabox').slideUp()
+                }
+            }) 
+
+            $('.upimg').change(function(){                
+                var reads = new FileReader();
+                var f = this.files[0];
+                reads.readAsDataURL(f);
+                var self = this;
+                reads.onload = function(e) {
+                    $(self).prev().find('img').attr({'src':this.result,'class':'ready'})
+                }
+
+            })
+
+
+            // 点击创建
+            $('.btn').click(function(){
+                //获取各类数据
+                var name = $('.name').val()
+                var address = $('.address').val()
+                var phone = $('.phone').val()
+                var category = $('.xiala')[0].innerText;
+                var image_path = $('#touxiang')[0].src;
+                var float_delivery_fee = $('.peisong').val() ;
+                var float_minimum_order_amount=$('.qisong').val() ;
+                var description = $('.jieshao').val()
+                var promotion_info = $('.biaoyu').val()
+                var business_license_image = $('#zhizhao')[0].src;
+                var  catering_service_license_image = $('#xuke')[0].src;
+               
+
+                $.post('https://elm.cangdu.org/shopping/addshop',{
+                        name:name,
+                        address:address,
+                        phone:phone,
+                        latitude:'37.87',//纬度
+                        longitude:'112.55',//经度
+                        category:category,//食品分类
+                        image_path:'1111',//店铺图片地址        地址太大请求失败
+                        float_delivery_fee:'float_delivery_fee',//运费
+                        float_minimum_order_amount:float_minimum_order_amount,//起送价
+                        description:description,//餐馆介绍
+                        promotion_info:promotion_info, //店铺标语
+                        business_license_image: '111' ,  	    //  	营业执照图片地址 地址太大请求失败
+                        catering_service_license_image: '111'   	    //  	餐饮服务许可证图片地址 地址太大请求失败
+                    },function(data){
+                        console.log(data)
+                    })
+            })
+
+        })
+
+    </script>
+</body>
+</html>
