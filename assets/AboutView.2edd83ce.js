@@ -1,0 +1,1 @@
+import{d as t,r as l,c as s,a as r,b as c,o as u}from"./index.f7fdfa98.js";const d={class:"about"},i=t({__name:"AboutView",setup(m){const e=l(new Date);return(_,o)=>{const a=c("el-calendar");return u(),s("div",d,[r(a,{modelValue:e.value,"onUpdate:modelValue":o[0]||(o[0]=n=>e.value=n)},null,8,["modelValue"])])}}});export{i as default};
